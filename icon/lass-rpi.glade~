@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkWindow" id="topwin">
     <property name="can_focus">False</property>
+    <property name="decorated">False</property>
     <child>
-      <object class="GtkGrid">
+      <object class="GtkGrid" id="topgrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="row_spacing">5</property>
@@ -15,6 +16,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">10 °c</property>
+            <attributes>
+              <attribute name="font-desc" value="&lt;Enter Value&gt; 20"/>
+            </attributes>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -26,6 +30,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">15 2.5um</property>
+            <attributes>
+              <attribute name="font-desc" value="&lt;Enter Value&gt; 20"/>
+            </attributes>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -40,6 +47,9 @@
             <property name="margin_top">10</property>
             <property name="label" translatable="yes">2016/08/29
 11:22:33</property>
+            <attributes>
+              <attribute name="font-desc" value="&lt;Enter Value&gt; 20"/>
+            </attributes>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -51,6 +61,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">light</property>
+            <attributes>
+              <attribute name="font-desc" value="&lt;Enter Value&gt; 16"/>
+            </attributes>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -62,6 +75,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">15 %</property>
+            <attributes>
+              <attribute name="font-desc" value="&lt;Enter Value&gt; 20"/>
+            </attributes>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -74,7 +90,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">My Office Lass</property>
             <attributes>
-              <attribute name="font-desc" value="AR PL Mingti2L Big5 Bold Italic 16"/>
+              <attribute name="font-desc" value="AR PL UKai TW Italic 32"/>
             </attributes>
           </object>
           <packing>
@@ -83,7 +99,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkImage">
+          <object class="GtkImage" id="lass-logo">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_right">10</property>

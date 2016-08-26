@@ -4,31 +4,31 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GObject, GLib
 GObject.threads_init()
 import time
-import threading
+import sqlite3
 
 # debug
 debug=1
 
 Udata={}
 Ulbs={}
-
-class readlassdata(threading.Thread):
-
-    def __init__(self):
-        threading.Thread.__init__(self)
-
-    def run(self):
-	global Udata
-        Udata['pm'] = '10'
-        Udata['temp'] = '10'
-        Udata['humi'] = '10'
-        Udata['light'] = '10'
+db_file="/root/monitor.db"
+conn=0
+cur=0
 
 
 #class UpdateData(threading.Thread):
 class UpdateData():
     def __init__(self, lbs):
 	self.lbs = Ulbs
+
+        global db_file
+        global conn
+        global cur
+
+        if conn == 0:
+            conn = sqlite3.connect(db_file) 
+            cur = conn.cursor() 
+
 	self.run()
 
     def run(self):
@@ -37,17 +37,36 @@ class UpdateData():
 
     def update_labels(self):
 	self.lbs['time'].set_text(Udata['time'])
-	self.lbs['temp'].set_text("%s °C" % Udata['temp'])
-	self.lbs['pm'].set_text("%s μg/m3" % Udata['pm'])
+	self.lbs['temp'].set_text(u"%s °C" % Udata['temp'])
+	self.lbs['pm'].set_text(u"%s μg/m3" % Udata['pm'])
 	self.lbs['light'].set_text(Udata['light'])
-	self.lbs['humi'].set_text("%s %%" % Udata['humi'])
+	self.lbs['humi'].set_text(u"%s %%" % Udata['humi'])
 
     def access_moodle(self):
 
 	global Udata
+        global cur
         ctime = time.strftime("%Y/%m/%d\n%H:%M:%S")
 	Udata['time'] = ctime
-	return True
+
+        data = cur.execute('SELECT sensor_value FROM monitor WHERE sensor=\'pm2.5\' ORDER BY date DESC limit 1')
+        Udata['pm'] = "%2.2f" % float(data.fetchone()[0])
+        
+        data = cur.execute("SELECT sensor_value FROM monitor WHERE sensor='temp' ORDER BY date DESC limit 1")
+        Udata['temp'] = "%2.2f" % float(data.fetchone()[0])
+
+        data = cur.execute("SELECT sensor_value FROM monitor WHERE sensor='humi' ORDER BY date DESC limit 1")
+        Udata['humi'] = "%2.2f" % float(data.fetchone()[0])
+        Udata['light'] = u''
+	print Udata
+
+        return True
+
+# close win
+def close_win():
+    global conn
+    conn.close()
+    Gtk.main_quit
 
 builder = Gtk.Builder()
 builder.add_from_file("icon/lass-rpi.glade")
@@ -60,12 +79,8 @@ llight = builder.get_object("light")
 lpm = builder.get_object("pm")
 lbs = {'time':ltime, 'temp':ltemp, 'humi':lhumi, 'light':llight, 'pm':lpm}
 Ulbs=lbs
-window.connect("delete-event", Gtk.main_quit)
-GObject.timeout_add_seconds(1, UpdateData, lbs)
+window.connect("delete-event", close_win)
+GObject.timeout_add_seconds(10, UpdateData, lbs)
 window.show_all()
-
-thrReader = readlassdata()
-thrReader.daemon = True
-thrReader.start()
 
 Gtk.main()
