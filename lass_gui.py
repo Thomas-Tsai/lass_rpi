@@ -20,6 +20,15 @@ cur=0
 class UpdateData():
     def __init__(self, lbs):
 	self.lbs = Ulbs
+
+        global db_file
+        global conn
+        global cur
+
+        if conn == 0:
+            conn = sqlite3.connect(db_file) 
+            cur = conn.cursor() 
+
 	self.run()
 
     def run(self):
@@ -56,7 +65,6 @@ class UpdateData():
         data = cur.execute("SELECT sensor_value FROM monitor WHERE sensor='humi' ORDER BY date DESC limit 1")
         Udata['humi'] = "%2.2f" % float(data.fetchone()[0])
         Udata['light'] = u''
-	#print Udata
     	conn.close()
 
         return True
