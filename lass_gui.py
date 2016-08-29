@@ -45,7 +45,7 @@ class UpdateData():
         ctime = time.strftime("%Y/%m/%d\n%H:%M:%S")
 	Udata['time'] = ctime
 
-        data = cur.execute('SELECT sensor_value FROM monitor WHERE sensor=\'pm2.5\' ORDER BY date DESC limit 1')
+        data = cur.execute('SELECT sensor_value FROM monitor WHERE sensor=\'pm25\' ORDER BY date DESC limit 1')
         Udata['pm'] = "%2.2f" % float(data.fetchone()[0])
         
         data = cur.execute("SELECT sensor_value FROM monitor WHERE sensor='temp' ORDER BY date DESC limit 1")
