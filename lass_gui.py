@@ -12,23 +12,12 @@ debug=1
 Udata={}
 Ulbs={}
 db_file="/root/monitor.db"
-conn=0
-cur=0
 
 
 #class UpdateData(threading.Thread):
 class UpdateData():
     def __init__(self, lbs):
 	self.lbs = Ulbs
-
-        global db_file
-        global conn
-        global cur
-
-        if conn == 0:
-            conn = sqlite3.connect(db_file) 
-            cur = conn.cursor() 
-
 	self.run()
 
     def run(self):
