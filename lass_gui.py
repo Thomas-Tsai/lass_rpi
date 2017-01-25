@@ -49,7 +49,7 @@ class UpdateData():
 	    self.lbs[datelabel].set_text(datestr)
 
 	    templabel = "ltemp%s" % x
-	    tempstr = "%s ~ %s" % (wx['high'], wx['low'])
+	    tempstr = "%s~%s" % (wx['high'], wx['low'])
 	    self.lbs[templabel].set_text(tempstr)
 
 	    codelabel = "lcode%s" % x
@@ -93,13 +93,13 @@ class UpdateData():
 	    with open(datafile, 'w') as outfile:
 		json.dump(result, outfile)
 	    print "file writed"
-	else:
-	    print "file %s exist" % datafile
-	    with open(datafile, 'r') as json_data:
-		sdata = json.load(json_data)
-		data = json.loads(sdata)
-		forecast = data['query']['results']['channel']['item']['forecast']
-		Udata['forecast'] = forecast
+
+	print "file %s exist" % datafile
+	with open(datafile, 'r') as json_data:
+	    sdata = json.load(json_data)
+	    data = json.loads(sdata)
+	    forecast = data['query']['results']['channel']['item']['forecast']
+	    Udata['forecast'] = forecast
 
         return True
 
