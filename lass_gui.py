@@ -70,13 +70,28 @@ class UpdateData():
 	Udata['time'] = ctime
 
         data = cur.execute('SELECT sensor_value FROM monitor WHERE sensor=\'pm25\' ORDER BY date DESC limit 1')
-        Udata['pm'] = "%2.2f" % float(data.fetchone()[0])
+        dbdata = data.fetchone()
+        if dbdata is None:
+            pm25data = 0
+        else:
+            pm25data = dbdata[0]
+        Udata['pm'] = "%2.2f" % float(pm25data)
         
         data = cur.execute("SELECT sensor_value FROM monitor WHERE sensor='temp' ORDER BY date DESC limit 1")
-        Udata['temp'] = "%2.2f" % float(data.fetchone()[0])
+        dbdata = data.fetchone()
+        if dbdata is None:
+            tempdata = 0
+        else:
+            tempdata = dbdata[0]
+        Udata['temp'] = "%2.2f" % float(tempdata)
 
         data = cur.execute("SELECT sensor_value FROM monitor WHERE sensor='humi' ORDER BY date DESC limit 1")
-        Udata['humi'] = "%2.2f" % float(data.fetchone()[0])
+        dbdata = data.fetchone()
+        if dbdata is None:
+            humidata = 0
+        else:
+            humidata = dbdata[0]
+        Udata['humi'] = "%2.2f" % float(humidata)
         Udata['light'] = u''
     	conn.close()
 
@@ -89,7 +104,9 @@ class UpdateData():
 	    yql_query = "select item.condition from weather.forecast where woeid=2306185 and u='c'"
 	    yql_query = "select * from weather.forecast where woeid=2306185 and u='c'"
 	    yql_url = baseurl + urllib.urlencode({'q':yql_query}) + "&format=json"
+            print yql_url
 	    result = urllib2.urlopen(yql_url).read()
+            print result
 	    with open(datafile, 'w') as outfile:
 		json.dump(result, outfile)
 	    print "file writed"
