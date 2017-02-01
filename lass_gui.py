@@ -14,7 +14,7 @@ debug=1
 
 Udata={}
 Ulbs={}
-db_file="./monitor.db"
+db_file="/root/monitor.db"
 
 
 #class UpdateData(threading.Thread):
@@ -39,10 +39,8 @@ class UpdateData():
 	x = 1
 #	for wx in Udata['forecast']:
 	UF=Udata['forecast']
-	print UF
 	for wxid in range(10):
 	    wx = UF[wxid]
-	    #print wx
 	    datelabel = "ldate%s" % x
 	    datestr = wx['date']
 	    datestr = datestr.replace("2017", "")
@@ -54,7 +52,6 @@ class UpdateData():
 
 	    codelabel = "lcode%s" % x
 	    codepath = "./icon/yahoo_weather_icon/%s.gif" % wx['code']
-	    print codepath
 	    self.lbs[codelabel].set_from_file(codepath)
 	    x = x+1
 
@@ -69,7 +66,7 @@ class UpdateData():
         ctime = time.strftime("%Y/%m/%d\n%H:%M:%S")
 	Udata['time'] = ctime
 
-        data = cur.execute('SELECT sensor_value FROM monitor WHERE sensor=\'pm25\' ORDER BY date DESC limit 1')
+        data = cur.execute('SELECT sensor_value FROM monitor WHERE sensor=\'pm2.5\' ORDER BY date DESC limit 1')
         dbdata = data.fetchone()
         if dbdata is None:
             pm25data = 0
@@ -98,20 +95,15 @@ class UpdateData():
 	datafile = 'data.txt'
 	Udata['forecast'] = []
 	if os.path.isfile(datafile) == False:
-	    print "file %s not exist" % datafile
 
 	    baseurl = "https://query.yahooapis.com/v1/public/yql?"
 	    yql_query = "select item.condition from weather.forecast where woeid=2306185 and u='c'"
 	    yql_query = "select * from weather.forecast where woeid=2306185 and u='c'"
 	    yql_url = baseurl + urllib.urlencode({'q':yql_query}) + "&format=json"
-            print yql_url
 	    result = urllib2.urlopen(yql_url).read()
-            print result
 	    with open(datafile, 'w') as outfile:
 		json.dump(result, outfile)
-	    print "file writed"
 
-	print "file %s exist" % datafile
 	with open(datafile, 'r') as json_data:
 	    sdata = json.load(json_data)
 	    data = json.loads(sdata)
